@@ -1,0 +1,1331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AET Resources</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0b0b0f;
+      --surface:   #13131b;
+      --surface2:  #1b1b26;
+      --border:    #252533;
+      --accent:    #c8a86b;
+      --accent-bg: rgba(200, 168, 107, 0.10);
+      --text:      #e6e2d9;
+      --muted:     #8f8e9d;
+      --blue:      #5b9cf6;
+      --green:     #4caf82;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 14px;
+      line-height: 1.5;
+      padding: 48px 28px 100px;
+    }
+
+    /* ── Animated background ── */
+    .hero-bg { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+    .hero-orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.28; animation: drift 18s ease-in-out infinite alternate; }
+    .hero-orb-1 { width: 600px; height: 600px; background: radial-gradient(circle, #c8a86b 0%, transparent 70%); top: -180px; left: -140px; animation-duration: 20s; }
+    .hero-orb-2 { width: 500px; height: 500px; background: radial-gradient(circle, #5b9cf6 0%, transparent 70%); top: 60px; right: -160px; animation-duration: 16s; animation-delay: -6s; opacity: 0.18; }
+    .hero-orb-3 { width: 400px; height: 400px; background: radial-gradient(circle, #c8a86b 0%, transparent 70%); bottom: 20%; left: 30%; animation-duration: 24s; animation-delay: -10s; opacity: 0.12; }
+    @keyframes drift {
+      0%   { transform: translate(0,0) scale(1); }
+      33%  { transform: translate(30px,-20px) scale(1.05); }
+      66%  { transform: translate(-20px,30px) scale(0.97); }
+      100% { transform: translate(15px,10px) scale(1.03); }
+    }
+
+    /* ── Layout ── */
+    .page-header {
+      max-width: 920px;
+      margin: 0 auto 40px;
+      padding-bottom: 28px;
+      border-bottom: 1px solid var(--border);
+      position: relative;
+      z-index: 1;
+    }
+
+    .wordmark {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 13px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 14px;
+    }
+
+    h1 { font-size: 30px; font-weight: 600; letter-spacing: -0.025em; color: var(--text); margin-bottom: 6px; }
+
+    .meta {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+      margin-bottom: 24px;
+    }
+
+    /* ── Controls ── */
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .search-wrap {
+      position: relative;
+      flex: 1;
+      min-width: 180px;
+      max-width: 260px;
+    }
+
+    .search-wrap svg {
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 13px;
+      height: 13px;
+      fill: none;
+      stroke: var(--muted);
+      stroke-width: 2;
+      stroke-linecap: round;
+      pointer-events: none;
+    }
+
+    .search-input {
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--text);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.04em;
+      padding: 6px 10px 6px 30px;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+
+    .search-input::placeholder { color: var(--muted); }
+    .search-input:focus { border-color: var(--accent); }
+
+    .filter-select {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--muted);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 6px 28px 6px 10px;
+      outline: none;
+      cursor: pointer;
+      appearance: none;
+      -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%238f8e9d' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 9px center;
+      transition: border-color 0.15s, color 0.15s;
+    }
+
+    .filter-select:focus,
+    .filter-select.active { border-color: var(--accent); color: var(--accent); }
+
+    .filter-select option { background: var(--surface2); color: var(--text); text-transform: none; letter-spacing: 0; }
+
+    /* View toggle */
+    .view-toggle { display: flex; gap: 4px; }
+
+    .view-btn {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--muted);
+      cursor: pointer;
+      padding: 5px 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 0.15s, color 0.15s, background 0.15s;
+    }
+
+    .view-btn svg { width: 14px; height: 14px; fill: currentColor; }
+    .view-btn.active { border-color: var(--accent); color: var(--accent); background: var(--accent-bg); }
+    .view-btn:hover:not(.active) { border-color: var(--muted); color: var(--text); }
+
+    .clear-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--muted);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 6px 12px;
+      cursor: pointer;
+      transition: border-color 0.15s, color 0.15s;
+      display: none;
+    }
+
+    .clear-btn.visible { display: block; }
+    .clear-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+    .result-count {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+      margin-left: auto;
+      white-space: nowrap;
+    }
+
+    /* ── Content ── */
+    .content {
+      max-width: 920px;
+      margin: 28px auto 0;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── FILE TYPE BADGES ── */
+    .ft-badge {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 2px 6px;
+      border-radius: 3px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .ft-pdf   { background: rgba(239,68,68,0.15);   color: #f87171; border: 1px solid rgba(239,68,68,0.25); }
+    .ft-word  { background: rgba(91,156,246,0.15);  color: #5b9cf6; border: 1px solid rgba(91,156,246,0.25); }
+    .ft-excel { background: rgba(76,175,130,0.15);  color: #4caf82; border: 1px solid rgba(76,175,130,0.25); }
+    .ft-pt    { background: rgba(168,85,247,0.15);  color: #c084fc; border: 1px solid rgba(168,85,247,0.25); }
+    .ft-logic { background: rgba(20,184,166,0.15);  color: #2dd4bf; border: 1px solid rgba(20,184,166,0.25); }
+    .ft-image { background: rgba(249,115,22,0.15);  color: #fb923c; border: 1px solid rgba(249,115,22,0.25); }
+    .ft-other { background: rgba(143,142,157,0.12); color: var(--muted); border: 1px solid var(--border); }
+
+    /* ── Access icons ── */
+    .access-icons { display: flex; gap: 5px; align-items: center; flex-shrink: 0; }
+
+    .access-icon {
+      width: 22px;
+      height: 22px;
+      border-radius: 3px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .access-icon svg { width: 12px; height: 12px; }
+
+    .access-icon.download { background: rgba(76,175,130,0.12); color: #4caf82; }
+    .access-icon.preview  { background: rgba(91,156,246,0.12); color: #5b9cf6; }
+
+    /* ── Pinned indicator ── */
+    .pin-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      flex-shrink: 0;
+    }
+
+    /* ════════════════════════════════════════
+       LIST VIEW
+    ════════════════════════════════════════ */
+    .resource-list { display: flex; flex-direction: column; gap: 2px; }
+
+    .resource-list-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 16px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+    }
+
+    .resource-list-item:hover { border-color: var(--accent); background: var(--surface2); }
+    .resource-list-item.is-pinned { border-left: 2px solid var(--accent); }
+
+    .list-title {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text);
+      flex: 1;
+      min-width: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .list-category {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .list-date {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      color: var(--muted);
+      white-space: nowrap;
+      flex-shrink: 0;
+      opacity: 0.7;
+    }
+
+    .list-arrow { color: var(--muted); font-size: 14px; flex-shrink: 0; transition: color 0.12s; }
+    .resource-list-item:hover .list-arrow { color: var(--accent); }
+
+    /* ════════════════════════════════════════
+       CARD GRID VIEW
+    ════════════════════════════════════════ */
+    .resource-grid {
+      display: none;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .resource-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      padding: 15px 16px 16px;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .resource-card:hover { border-color: var(--accent); background: var(--surface2); }
+    .resource-card.is-pinned { border-top: 2px solid var(--accent); }
+
+    .card-top-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .card-title {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text);
+      line-height: 1.4;
+    }
+
+    .card-category {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+    }
+
+    .card-bottom-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-top: auto;
+    }
+
+    .card-date {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      color: var(--muted);
+      opacity: 0.7;
+    }
+
+    /* ── Pinned section heading ── */
+    .pinned-heading {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 10px;
+      margin-top: 4px;
+    }
+
+    .pinned-heading .dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .pinned-section { margin-bottom: 28px; }
+    .pinned-divider { height: 1px; background: var(--border); margin-bottom: 24px; }
+
+    /* ── Empty / load states ── */
+    .load-state {
+      text-align: center;
+      padding: 60px 0;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .empty-state {
+      display: none;
+      text-align: center;
+      padding: 60px 0;
+      color: var(--muted);
+      font-style: italic;
+      font-size: 13px;
+    }
+
+    /* ════════════════════════════════════════
+       MODAL
+    ════════════════════════════════════════ */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(11, 11, 15, 0.88);
+      z-index: 100;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 36px 20px 60px;
+      overflow-y: auto;
+    }
+
+    .modal-overlay.open { display: flex; }
+
+    .modal {
+      width: 100%;
+      max-width: 580px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+      box-shadow: 0 32px 80px rgba(0,0,0,0.6);
+      margin: auto;
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 18px 20px 16px;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface2);
+    }
+
+    .modal-header-left { display: flex; flex-direction: column; gap: 8px; flex: 1; min-width: 0; }
+
+    .modal-header-top { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+
+    .modal-title {
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.3;
+    }
+
+    .modal-close {
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 18px;
+      line-height: 1;
+      padding: 4px 8px;
+      flex-shrink: 0;
+      transition: border-color 0.12s, color 0.12s;
+    }
+
+    .modal-close:hover { border-color: var(--muted); color: var(--text); }
+
+    /* Action buttons in modal */
+    .modal-actions {
+      display: flex;
+      gap: 8px;
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface2);
+      flex-wrap: wrap;
+    }
+
+    .modal-action-btn {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 9px 16px;
+      border-radius: 5px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      text-decoration: none;
+      cursor: pointer;
+      transition: opacity 0.15s;
+      border: none;
+    }
+
+    .modal-action-btn:hover { opacity: 0.85; }
+
+    .modal-action-btn svg { width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+
+    .btn-download { background: rgba(76,175,130,0.18); color: #4caf82; border: 1px solid rgba(76,175,130,0.3); }
+    .btn-preview  { background: rgba(91,156,246,0.18); color: #5b9cf6; border: 1px solid rgba(91,156,246,0.3); }
+
+    /* Modal body */
+    .modal-body {
+      padding: 18px 20px 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .modal-section { display: flex; flex-direction: column; gap: 8px; }
+
+    .modal-field { display: flex; flex-direction: column; gap: 3px; }
+
+    .modal-field-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .modal-field-value { font-size: 13px; color: var(--text); line-height: 1.5; }
+    .modal-field-value.muted { color: var(--muted); }
+
+    .modal-pills { display: flex; flex-wrap: wrap; gap: 5px; }
+
+    .modal-pill {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 3px 8px;
+      white-space: nowrap;
+    }
+
+    .modal-divider { height: 1px; background: var(--border); }
+
+    /* ── Responsive ── */
+    @media (max-width: 700px) {
+      .resource-grid { grid-template-columns: repeat(2, 1fr); }
+      .list-category, .list-date { display: none; }
+      body { padding: 32px 16px 80px; }
+      .result-count { margin-left: 0; width: 100%; }
+    }
+
+    @media (max-width: 440px) {
+      .resource-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ── Floating nav ── */
+    .belmont-nav { position: fixed; z-index: 200; top: 24px; left: 24px; }
+
+    @media (max-width: 560px) { .belmont-nav { top: auto; left: auto; bottom: 20px; right: 20px; } }
+
+    .belmont-nav-toggle {
+      width: 38px; height: 38px;
+      background: var(--surface);
+      border: 1.5px solid var(--accent);
+      border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      transition: background 0.15s;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.35);
+    }
+
+    .belmont-nav-toggle:hover { background: var(--surface2); }
+    .belmont-nav-toggle svg { width: 16px; height: 16px; }
+    .belmont-nav-toggle svg rect { fill: var(--accent); }
+
+    .belmont-nav-menu {
+      position: absolute; top: 46px; left: 0;
+      min-width: 196px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px; overflow: hidden;
+      box-shadow: 0 16px 44px rgba(0,0,0,0.5);
+      opacity: 0; transform: translateY(-6px);
+      pointer-events: none;
+      transition: opacity 0.15s ease, transform 0.15s ease;
+    }
+
+    @media (max-width: 560px) {
+      .belmont-nav-menu { top: auto; bottom: 46px; left: auto; right: 0; transform: translateY(6px); }
+    }
+
+    .belmont-nav.open .belmont-nav-menu { opacity: 1; transform: translateY(0); pointer-events: auto; }
+
+    .belmont-nav-link {
+      display: flex; align-items: center; gap: 11px;
+      padding: 11px 14px;
+      text-decoration: none;
+      border-bottom: 1px solid var(--border);
+      transition: background 0.12s;
+    }
+
+    .belmont-nav-link:last-child { border-bottom: none; }
+    .belmont-nav-link:hover { background: var(--surface2); }
+
+    .belmont-nav-link-icon {
+      width: 28px; height: 28px;
+      border-radius: 5px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; color: var(--accent);
+    }
+
+    .belmont-nav-link-icon svg { width: 15px; height: 15px; }
+
+    .belmont-nav-link-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px; font-weight: 500;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .belmont-nav-link.is-current .belmont-nav-link-icon {
+      color: var(--blue); border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(91,156,246,0.18), 0 0 14px rgba(91,156,246,0.35);
+    }
+
+    .belmont-nav-link.is-current .belmont-nav-link-label { color: var(--blue); }
+  </style>
+</head>
+<body>
+
+  <div class="hero-bg" aria-hidden="true">
+    <div class="hero-orb hero-orb-1"></div>
+    <div class="hero-orb hero-orb-2"></div>
+    <div class="hero-orb hero-orb-3"></div>
+  </div>
+
+  <div class="belmont-nav" id="belmontNav" data-current="resources">
+    <button class="belmont-nav-toggle" id="belmontNavToggle" aria-label="Open navigation" aria-expanded="false">
+      <svg viewBox="0 0 16 16">
+        <rect x="2" y="4" width="12" height="1.6" rx="0.8"/>
+        <rect x="2" y="7.2" width="12" height="1.6" rx="0.8"/>
+        <rect x="2" y="10.4" width="12" height="1.6" rx="0.8"/>
+      </svg>
+    </button>
+    <nav class="belmont-nav-menu">
+      <a class="belmont-nav-link" data-page="home" href="https://bradwintersmusic-cloud.github.io/studio-home/">
+        <span class="belmont-nav-link-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/><path d="M9 21V12h6v9"/></svg>
+        </span>
+        <span class="belmont-nav-link-label">Studio Hub</span>
+      </a>
+      <a class="belmont-nav-link" data-page="schedule" href="https://bradwintersmusic-cloud.github.io/studioassistant-sync/">
+        <span class="belmont-nav-link-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.5" d="M2 4h20v18H2zm5-3v3m10-3v3M2 8h20M5 12.5h3m-3 5h3m2.5-5h3m2.5 0h3m-8.5 5h3"/></svg>
+        </span>
+        <span class="belmont-nav-link-label">Studio Schedule</span>
+      </a>
+      <a class="belmont-nav-link" data-page="videos" href="https://bradwintersmusic-cloud.github.io/studio-videos/">
+        <span class="belmont-nav-link-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10"><path d="M3.5 5.5h-3v18h18v-3"/><path d="M22.5 1.5h-19v19h19z"/><path d="M10.5 7v8l7-4z"/></g></svg>
+        </span>
+        <span class="belmont-nav-link-label">Video Library</span>
+      </a>
+      <a class="belmont-nav-link" data-page="policies" href="https://bradwintersmusic-cloud.github.io/studio-policies/">
+        <span class="belmont-nav-link-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="m2.3 20.28l9.6-9.6l-1.4-1.42l-.72.71a.996.996 0 0 1-1.41 0l-.71-.71a.996.996 0 0 1 0-1.41l5.66-5.66a.996.996 0 0 1 1.41 0l.71.71c.39.39.39 1.02 0 1.41l-.71.69l1.42 1.43a.996.996 0 0 1 1.41 0c.39.39.39 1.03 0 1.42l1.41 1.41l.71-.71c.39-.39 1.03-.39 1.42 0l.7.71c.39.39.39 1.03 0 1.42l-5.65 5.65c-.39.39-1.03.39-1.42 0l-.7-.7a.99.99 0 0 1 0-1.42l.7-.71l-1.41-1.41l-9.61 9.61a.996.996 0 0 1-1.41 0c-.39-.39-.39-1.03 0-1.42M20 19a2 2 0 0 1 2 2v1H12v-1a2 2 0 0 1 2-2z"/></svg>
+        </span>
+        <span class="belmont-nav-link-label">Policies</span>
+      </a>
+      <a class="belmont-nav-link" data-page="tools" href="https://bradwintersmusic-cloud.github.io/studio-tools/">
+        <span class="belmont-nav-link-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+        </span>
+        <span class="belmont-nav-link-label">Studio Tools</span>
+      </a>
+      <a class="belmont-nav-link" data-page="musicians" href="https://bradwintersmusic-cloud.github.io/studio-musicians/">
+        <span class="belmont-nav-link-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="m42.31 13.38l-25.1 3.48V7.98l25.1-3.48zm0 0v17.15m-25.1-13.67v20.88"/><circle cx="11.45" cy="37.74" r="5.76"/><circle cx="36.55" cy="30.53" r="5.76"/></svg>
+        </span>
+        <span class="belmont-nav-link-label">Session Musicians</span>
+      </a>
+      <a class="belmont-nav-link is-current" data-page="resources" href="https://bradwintersmusic-cloud.github.io/studio-resources/">
+        <span class="belmont-nav-link-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        </span>
+        <span class="belmont-nav-link-label">Resources</span>
+      </a>
+    </nav>
+  </div>
+
+  <header class="page-header">
+    <div class="wordmark">Belmont University &middot; AET</div>
+    <h1>Resources</h1>
+    <div class="meta">Manuals, templates, I/O setups, and studio documentation</div>
+
+    <div class="controls">
+      <div class="search-wrap">
+        <svg viewBox="0 0 16 16"><circle cx="6.5" cy="6.5" r="4.5"/><line x1="10.5" y1="10.5" x2="14" y2="14"/></svg>
+        <input class="search-input" id="searchInput" type="text" placeholder="Search resources...">
+      </div>
+
+      <select class="filter-select" id="categoryFilter">
+        <option value="">All Categories</option>
+        <option>Manual</option>
+        <option>Equipment Guide</option>
+        <option>I/O Setup</option>
+        <option>Session Template</option>
+        <option>Input Sheet</option>
+        <option>Patch Sheet</option>
+        <option>Course Material</option>
+        <option>Directions</option>
+        <option>Studio Policy</option>
+        <option>Reference</option>
+        <option>Chart</option>
+        <option>Guide</option>
+        <option>Signal Flow Diagram</option>
+        <option>Wiring Diagram</option>
+        <option>Other</option>
+      </select>
+
+      <select class="filter-select" id="typeFilter">
+        <option value="">All File Types</option>
+        <option value="pdf">PDF</option>
+        <option value="word">Word</option>
+        <option value="excel">Excel</option>
+        <option value="pt">Pro Tools</option>
+        <option value="logic">Logic</option>
+        <option value="image">Image</option>
+        <option value="other">Other</option>
+      </select>
+
+      <select class="filter-select" id="accessFilter">
+        <option value="">All Access</option>
+        <option value="Downloadable">Downloadable</option>
+        <option value="Preview Only">Preview Only</option>
+        <option value="Both">Both</option>
+      </select>
+
+      <select class="filter-select" id="classFilter">
+        <option value="">All Classes</option>
+      </select>
+
+      <select class="filter-select" id="instructorFilter">
+        <option value="">All Instructors</option>
+      </select>
+
+      <div class="view-toggle">
+        <button class="view-btn active" id="btnList" title="List view">
+          <svg viewBox="0 0 14 14"><rect x="0" y="1" width="14" height="2" rx="1"/><rect x="0" y="6" width="14" height="2" rx="1"/><rect x="0" y="11" width="14" height="2" rx="1"/></svg>
+        </button>
+        <button class="view-btn" id="btnGrid" title="Grid view">
+          <svg viewBox="0 0 14 14"><rect x="0" y="0" width="6" height="6" rx="1"/><rect x="8" y="0" width="6" height="6" rx="1"/><rect x="0" y="8" width="6" height="6" rx="1"/><rect x="8" y="8" width="6" height="6" rx="1"/></svg>
+        </button>
+      </div>
+
+      <button class="clear-btn" id="clearBtn">Clear Filters</button>
+      <span class="result-count" id="resultCount"></span>
+    </div>
+  </header>
+
+  <main class="content" id="mainContent">
+    <div class="load-state" id="loadState">Loading resources...</div>
+    <div class="resource-list" id="resourceList" style="display:none;"></div>
+    <div class="resource-grid" id="resourceGrid"></div>
+    <div class="empty-state" id="emptyState">No resources match your filters.</div>
+  </main>
+
+  <!-- Modal -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal" id="modal">
+      <div class="modal-header">
+        <div class="modal-header-left">
+          <div class="modal-header-top" id="modalHeaderTop"></div>
+          <div class="modal-title" id="modalTitle"></div>
+        </div>
+        <button class="modal-close" id="modalClose">&#x2715;</button>
+      </div>
+      <div class="modal-actions" id="modalActions"></div>
+      <div class="modal-body" id="modalBody"></div>
+    </div>
+  </div>
+
+  <script>
+    // ══════════════════════════════════════════════════════════
+    // CONFIGURATION
+    // Replace with your published Google Sheet CSV URL
+    // File → Share → Publish to web → Sheet tab → CSV → Copy URL
+    // ══════════════════════════════════════════════════════════
+    var SHEET_CSV_URL = "YOUR_GOOGLE_SHEET_CSV_URL_HERE";
+
+    // ── GOOGLE SHEET COLUMN HEADERS (must match exactly) ──────
+    // Submission Date, Title, Category, File Type, Access,
+    // Download URL, Preview URL, Instructor, Classes, Studios,
+    // Notes, Pinned, Active
+
+    // ── STATE ─────────────────────────────────────────────────
+    var allResources = [];
+    var currentView = "list";
+    var activeSearch = "";
+    var activeCategory = "";
+    var activeType = "";
+    var activeAccess = "";
+    var activeClass = "";
+    var activeInstructor = "";
+
+    // ── ELEMENTS ──────────────────────────────────────────────
+    var mainContent  = document.getElementById("mainContent");
+    var loadState    = document.getElementById("loadState");
+    var resourceList = document.getElementById("resourceList");
+    var resourceGrid = document.getElementById("resourceGrid");
+    var emptyState   = document.getElementById("emptyState");
+    var resultCount  = document.getElementById("resultCount");
+    var clearBtn     = document.getElementById("clearBtn");
+
+    // ── CSV PARSER ────────────────────────────────────────────
+    function parseCSV(text) {
+      var rows = [];
+      var lines = text.split("\n");
+      for (var i = 0; i < lines.length; i++) {
+        var line = lines[i].trim();
+        if (!line) { continue; }
+        var row = [];
+        var inQuote = false;
+        var cell = "";
+        for (var c = 0; c < line.length; c++) {
+          var ch = line[c];
+          if (ch === '"') {
+            if (inQuote && line[c+1] === '"') { cell += '"'; c++; }
+            else { inQuote = !inQuote; }
+          } else if (ch === ',' && !inQuote) {
+            row.push(cell.trim());
+            cell = "";
+          } else {
+            cell += ch;
+          }
+        }
+        row.push(cell.trim());
+        rows.push(row);
+      }
+      return rows;
+    }
+
+    function csvToObjects(rows) {
+      if (rows.length < 2) { return []; }
+      var headers = rows[0];
+      var result = [];
+      for (var i = 1; i < rows.length; i++) {
+        var obj = {};
+        for (var j = 0; j < headers.length; j++) {
+          obj[headers[j]] = rows[i][j] || "";
+        }
+        result.push(obj);
+      }
+      return result;
+    }
+
+    // ── FILE TYPE DETECTION ───────────────────────────────────
+    function detectFileType(row) {
+      // Check explicit File Type column first, then infer from URL
+      var explicit = (row["File Type"] || "").toLowerCase().trim();
+      if (explicit) {
+        if (explicit === "pdf") { return "pdf"; }
+        if (explicit === "word" || explicit === "doc" || explicit === "docx") { return "word"; }
+        if (explicit === "excel" || explicit === "xls" || explicit === "xlsx") { return "excel"; }
+        if (explicit === "pro tools" || explicit === "pt" || explicit === "ptx" || explicit === "pts" || explicit === "pio") { return "pt"; }
+        if (explicit === "logic" || explicit === "logicx") { return "logic"; }
+        if (explicit === "image" || explicit === "png" || explicit === "jpg" || explicit === "jpeg") { return "image"; }
+      }
+      // Infer from download URL extension
+      var url = (row["Download URL"] || row["Preview URL"] || "").toLowerCase();
+      if (url.indexOf(".pdf") !== -1) { return "pdf"; }
+      if (url.indexOf(".doc") !== -1) { return "word"; }
+      if (url.indexOf(".xls") !== -1) { return "excel"; }
+      if (url.indexOf(".ptx") !== -1 || url.indexOf(".pts") !== -1 || url.indexOf(".pio") !== -1) { return "pt"; }
+      if (url.indexOf(".logicx") !== -1) { return "logic"; }
+      if (url.indexOf(".png") !== -1 || url.indexOf(".jpg") !== -1 || url.indexOf(".jpeg") !== -1) { return "image"; }
+      return "other";
+    }
+
+    function fileTypeBadgeHtml(type) {
+      var labels = { pdf: "PDF", word: "Word", excel: "Excel", pt: "Pro Tools", logic: "Logic", image: "Image", other: "File" };
+      var label = labels[type] || "File";
+      return '<span class="ft-badge ft-' + type + '">' + label + '</span>';
+    }
+
+    // ── ACCESS ICONS ──────────────────────────────────────────
+    var downloadSvg = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M8 2v8M5 7l3 3 3-3M2 12v1a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-1"/></svg>';
+    var previewSvg  = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="8" cy="8" r="3"/><path d="M1 8s2.5-5 7-5 7 5 7 5-2.5 5-7 5-7-5-7-5z"/></svg>';
+
+    function accessIconsHtml(r) {
+      var html = '<div class="access-icons">';
+      if (r["Download URL"]) { html += '<div class="access-icon download" title="Downloadable">' + downloadSvg + '</div>'; }
+      if (r["Preview URL"])  { html += '<div class="access-icon preview" title="Preview available">' + previewSvg + '</div>'; }
+      html += '</div>';
+      return html;
+    }
+
+    // ── DATE FORMATTING ───────────────────────────────────────
+    function formatDate(raw) {
+      if (!raw) { return ""; }
+      var d = new Date(raw);
+      if (isNaN(d.getTime())) { return raw; }
+      return d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+    }
+
+    // ── SPLIT CELL ────────────────────────────────────────────
+    function splitCell(val) {
+      if (!val) { return []; }
+      var parts = val.split(",");
+      var out = [];
+      for (var i = 0; i < parts.length; i++) {
+        var p = parts[i].trim();
+        if (p) { out.push(p); }
+      }
+      return out;
+    }
+
+    // ── LOAD DATA ─────────────────────────────────────────────
+    fetch(SHEET_CSV_URL + "&t=" + Date.now())
+      .then(function(res) {
+        if (!res.ok) { throw new Error("HTTP " + res.status); }
+        return res.text();
+      })
+      .then(function(text) {
+        var rows = parseCSV(text);
+        var objects = csvToObjects(rows);
+
+        allResources = [];
+        for (var i = 0; i < objects.length; i++) {
+          var r = objects[i];
+          var activeVal = (r["Active"] || "").trim().toUpperCase();
+          if (activeVal === "FALSE") { continue; }
+          if (!r["Title"]) { continue; }
+          r._fileType = detectFileType(r);
+          allResources.push(r);
+        }
+
+        // Sort: pinned first, then newest first by Submission Date
+        allResources.sort(function(a, b) {
+          var aPin = (a["Pinned"] || "").toUpperCase() === "TRUE";
+          var bPin = (b["Pinned"] || "").toUpperCase() === "TRUE";
+          if (aPin && !bPin) { return -1; }
+          if (!aPin && bPin) { return 1; }
+          var aDate = new Date(a["Submission Date"] || 0);
+          var bDate = new Date(b["Submission Date"] || 0);
+          return bDate - aDate;
+        });
+
+        // Bootstrap class and instructor dropdowns from live data
+        var classSet = {};
+        var instructorSet = {};
+        for (var i = 0; i < allResources.length; i++) {
+          var classes = splitCell(allResources[i]["Classes"]);
+          for (var c = 0; c < classes.length; c++) { classSet[classes[c]] = true; }
+          var instr = (allResources[i]["Instructor"] || "").trim();
+          if (instr) { instructorSet[instr] = true; }
+        }
+
+        var classFilterEl = document.getElementById("classFilter");
+        var classKeys = Object.keys(classSet).sort();
+        for (var i = 0; i < classKeys.length; i++) {
+          var opt = document.createElement("option");
+          opt.value = classKeys[i];
+          opt.textContent = classKeys[i];
+          classFilterEl.appendChild(opt);
+        }
+
+        var instrFilterEl = document.getElementById("instructorFilter");
+        var instrKeys = Object.keys(instructorSet).sort();
+        for (var i = 0; i < instrKeys.length; i++) {
+          var opt = document.createElement("option");
+          opt.value = instrKeys[i];
+          opt.textContent = instrKeys[i];
+          instrFilterEl.appendChild(opt);
+        }
+
+        if (classKeys.length === 0) { classFilterEl.style.display = "none"; }
+        if (instrKeys.length === 0) { instrFilterEl.style.display = "none"; }
+
+        loadState.style.display = "none";
+        resourceList.style.display = "flex";
+        render();
+      })
+      .catch(function(err) {
+        loadState.textContent = "Could not load resources. (" + err.message + ")";
+      });
+
+    // ── FILTER ────────────────────────────────────────────────
+    function isFiltered() {
+      return activeSearch || activeCategory || activeType || activeAccess || activeClass || activeInstructor;
+    }
+
+    function matchesFilters(r) {
+      if (activeCategory && r["Category"] !== activeCategory) { return false; }
+      if (activeType && r._fileType !== activeType) { return false; }
+      if (activeAccess && r["Access"] !== activeAccess) { return false; }
+      if (activeInstructor && r["Instructor"] !== activeInstructor) { return false; }
+      if (activeClass) {
+        var classes = splitCell(r["Classes"]);
+        var found = false;
+        for (var c = 0; c < classes.length; c++) {
+          if (classes[c] === activeClass) { found = true; break; }
+        }
+        if (!found) { return false; }
+      }
+      if (activeSearch) {
+        var q = activeSearch.toLowerCase();
+        var inTitle = (r["Title"] || "").toLowerCase().indexOf(q) !== -1;
+        var inCat   = (r["Category"] || "").toLowerCase().indexOf(q) !== -1;
+        var inNotes = (r["Notes"] || "").toLowerCase().indexOf(q) !== -1;
+        var inInstr = (r["Instructor"] || "").toLowerCase().indexOf(q) !== -1;
+        if (!inTitle && !inCat && !inNotes && !inInstr) { return false; }
+      }
+      return true;
+    }
+
+    // ── RENDER ────────────────────────────────────────────────
+    function render() {
+      resourceList.innerHTML = "";
+      resourceGrid.innerHTML = "";
+      emptyState.style.display = "none";
+
+      var filtered = [];
+      for (var i = 0; i < allResources.length; i++) {
+        if (matchesFilters(allResources[i])) { filtered.push(allResources[i]); }
+      }
+
+      resultCount.textContent = filtered.length + " resource" + (filtered.length !== 1 ? "s" : "");
+
+      if (filtered.length === 0) {
+        emptyState.style.display = "block";
+        return;
+      }
+
+      // Separate pinned and regular (only when no filters active)
+      var pinned = [];
+      var regular = [];
+      var filtersActive = !!isFiltered();
+
+      for (var i = 0; i < filtered.length; i++) {
+        if (!filtersActive && (filtered[i]["Pinned"] || "").toUpperCase() === "TRUE") {
+          pinned.push(filtered[i]);
+        } else {
+          regular.push(filtered[i]);
+        }
+      }
+
+      if (currentView === "list") {
+        resourceList.style.display = "flex";
+        resourceGrid.style.display = "none";
+
+        if (pinned.length > 0) {
+          var pinnedHeading = document.createElement("div");
+          pinnedHeading.className = "pinned-heading";
+          pinnedHeading.innerHTML = '<div class="dot"></div>Pinned';
+          resourceList.appendChild(pinnedHeading);
+          for (var i = 0; i < pinned.length; i++) {
+            resourceList.appendChild(buildListItem(pinned[i], true));
+          }
+          var div = document.createElement("div");
+          div.className = "pinned-divider";
+          resourceList.appendChild(div);
+        }
+
+        for (var i = 0; i < regular.length; i++) {
+          resourceList.appendChild(buildListItem(regular[i], false));
+        }
+
+      } else {
+        resourceList.style.display = "none";
+        resourceGrid.style.display = "grid";
+
+        if (pinned.length > 0) {
+          var pinnedSection = document.createElement("div");
+          pinnedSection.className = "pinned-section";
+          var pinnedHeading = document.createElement("div");
+          pinnedHeading.className = "pinned-heading";
+          pinnedHeading.innerHTML = '<div class="dot"></div>Pinned';
+          pinnedSection.appendChild(pinnedHeading);
+          var pinnedGrid = document.createElement("div");
+          pinnedGrid.style.display = "grid";
+          pinnedGrid.style.gridTemplateColumns = "repeat(3, 1fr)";
+          pinnedGrid.style.gap = "14px";
+          for (var i = 0; i < pinned.length; i++) {
+            pinnedGrid.appendChild(buildCard(pinned[i], true));
+          }
+          pinnedSection.appendChild(pinnedGrid);
+          var divEl = document.createElement("div");
+          divEl.className = "pinned-divider";
+          pinnedSection.appendChild(divEl);
+          resourceGrid.appendChild(pinnedSection);
+        }
+
+        for (var i = 0; i < regular.length; i++) {
+          resourceGrid.appendChild(buildCard(regular[i], false));
+        }
+      }
+    }
+
+    // ── BUILD LIST ITEM ───────────────────────────────────────
+    function buildListItem(r, isPinned) {
+      var item = document.createElement("div");
+      item.className = "resource-list-item" + (isPinned ? " is-pinned" : "");
+
+      item.innerHTML =
+        fileTypeBadgeHtml(r._fileType) +
+        '<span class="list-title">' + r["Title"] + '</span>' +
+        '<span class="list-category">' + (r["Category"] || "") + '</span>' +
+        accessIconsHtml(r) +
+        '<span class="list-date">' + formatDate(r["Submission Date"]) + '</span>' +
+        '<span class="list-arrow">&#8250;</span>';
+
+      item.addEventListener("click", function(res) {
+        return function() { openModal(res); };
+      }(r));
+
+      return item;
+    }
+
+    // ── BUILD CARD ────────────────────────────────────────────
+    function buildCard(r, isPinned) {
+      var card = document.createElement("div");
+      card.className = "resource-card" + (isPinned ? " is-pinned" : "");
+
+      card.innerHTML =
+        '<div class="card-top-row">' +
+          fileTypeBadgeHtml(r._fileType) +
+          accessIconsHtml(r) +
+        '</div>' +
+        '<div class="card-title">' + r["Title"] + '</div>' +
+        '<div class="card-category">' + (r["Category"] || "") + '</div>' +
+        '<div class="card-bottom-row">' +
+          '<span class="card-date">' + formatDate(r["Submission Date"]) + '</span>' +
+        '</div>';
+
+      card.addEventListener("click", function(res) {
+        return function() { openModal(res); };
+      }(r));
+
+      return card;
+    }
+
+    // ── MODAL ─────────────────────────────────────────────────
+    var overlay       = document.getElementById("modalOverlay");
+    var modalHeaderTop = document.getElementById("modalHeaderTop");
+    var modalTitleEl  = document.getElementById("modalTitle");
+    var modalActions  = document.getElementById("modalActions");
+    var modalBody     = document.getElementById("modalBody");
+    var modalClose    = document.getElementById("modalClose");
+
+    function openModal(r) {
+      // Header
+      modalHeaderTop.innerHTML = fileTypeBadgeHtml(r._fileType);
+      modalTitleEl.textContent = r["Title"];
+
+      // Action buttons
+      modalActions.innerHTML = "";
+      if (r["Download URL"]) {
+        var dlBtn = document.createElement("a");
+        dlBtn.className = "modal-action-btn btn-download";
+        dlBtn.href = r["Download URL"];
+        dlBtn.target = "_blank";
+        dlBtn.rel = "noopener";
+        dlBtn.innerHTML = downloadSvg + " Download";
+        modalActions.appendChild(dlBtn);
+      }
+      if (r["Preview URL"]) {
+        var pvBtn = document.createElement("a");
+        pvBtn.className = "modal-action-btn btn-preview";
+        pvBtn.href = r["Preview URL"];
+        pvBtn.target = "_blank";
+        pvBtn.rel = "noopener";
+        pvBtn.innerHTML = previewSvg + " Preview";
+        modalActions.appendChild(pvBtn);
+      }
+
+      // Body
+      var html = "";
+
+      // Category, access, date row
+      html += '<div class="modal-section">';
+      html += '<div style="display:flex;gap:16px;flex-wrap:wrap;">';
+      if (r["Category"]) {
+        html += '<div class="modal-field"><div class="modal-field-label">Category</div><div class="modal-field-value">' + r["Category"] + '</div></div>';
+      }
+      if (r["Access"]) {
+        html += '<div class="modal-field"><div class="modal-field-label">Access</div><div class="modal-field-value">' + r["Access"] + '</div></div>';
+      }
+      if (r["Submission Date"]) {
+        html += '<div class="modal-field"><div class="modal-field-label">Added</div><div class="modal-field-value">' + formatDate(r["Submission Date"]) + '</div></div>';
+      }
+      html += '</div></div>';
+
+      // Instructor
+      if (r["Instructor"]) {
+        html += '<div class="modal-divider"></div>';
+        html += '<div class="modal-section"><div class="modal-field"><div class="modal-field-label">Instructor</div><div class="modal-field-value">' + r["Instructor"] + '</div></div></div>';
+      }
+
+      // Studios
+      var studios = splitCell(r["Studios"]);
+      if (studios.length > 0) {
+        html += '<div class="modal-divider"></div>';
+        html += '<div class="modal-section"><div class="modal-field"><div class="modal-field-label">Studios</div><div class="modal-pills">';
+        for (var s = 0; s < studios.length; s++) {
+          html += '<span class="modal-pill">' + studios[s] + '</span>';
+        }
+        html += '</div></div></div>';
+      }
+
+      // Classes
+      var classes = splitCell(r["Classes"]);
+      if (classes.length > 0) {
+        html += '<div class="modal-divider"></div>';
+        html += '<div class="modal-section"><div class="modal-field"><div class="modal-field-label">Classes</div><div class="modal-pills">';
+        for (var c = 0; c < classes.length; c++) {
+          html += '<span class="modal-pill">' + classes[c] + '</span>';
+        }
+        html += '</div></div></div>';
+      }
+
+      // Notes
+      if (r["Notes"]) {
+        html += '<div class="modal-divider"></div>';
+        html += '<div class="modal-section"><div class="modal-field"><div class="modal-field-label">Notes</div><div class="modal-field-value muted">' + r["Notes"] + '</div></div></div>';
+      }
+
+      modalBody.innerHTML = html;
+
+      overlay.classList.add("open");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeModal() {
+      overlay.classList.remove("open");
+      document.body.style.overflow = "";
+    }
+
+    modalClose.addEventListener("click", closeModal);
+    overlay.addEventListener("click", function(e) { if (e.target === overlay) { closeModal(); } });
+    document.addEventListener("keydown", function(e) { if (e.key === "Escape") { closeModal(); } });
+
+    // ── VIEW TOGGLE ───────────────────────────────────────────
+    document.getElementById("btnList").addEventListener("click", function() {
+      currentView = "list";
+      this.classList.add("active");
+      document.getElementById("btnGrid").classList.remove("active");
+      render();
+    });
+
+    document.getElementById("btnGrid").addEventListener("click", function() {
+      currentView = "grid";
+      this.classList.add("active");
+      document.getElementById("btnList").classList.remove("active");
+      render();
+    });
+
+    // ── CLEAR FILTERS ─────────────────────────────────────────
+    function updateClearBtn() {
+      clearBtn.classList.toggle("visible", !!isFiltered());
+    }
+
+    function clearFilters() {
+      activeSearch = ""; activeCategory = ""; activeType = "";
+      activeAccess = ""; activeClass = ""; activeInstructor = "";
+      document.getElementById("searchInput").value = "";
+      var selects = ["categoryFilter","typeFilter","accessFilter","classFilter","instructorFilter"];
+      for (var i = 0; i < selects.length; i++) {
+        var el = document.getElementById(selects[i]);
+        if (el) { el.value = ""; el.className = "filter-select"; }
+      }
+      updateClearBtn();
+      render();
+    }
+
+    clearBtn.addEventListener("click", clearFilters);
+
+    // ── CONTROL EVENTS ────────────────────────────────────────
+    function wireSelect(id, setter) {
+      var el = document.getElementById(id);
+      if (!el) { return; }
+      el.addEventListener("change", function() {
+        setter(this.value);
+        this.className = "filter-select" + (this.value ? " active" : "");
+        updateClearBtn();
+        render();
+      });
+    }
+
+    document.getElementById("searchInput").addEventListener("input", function() {
+      activeSearch = this.value.trim();
+      updateClearBtn();
+      render();
+    });
+
+    wireSelect("categoryFilter",   function(v) { activeCategory = v; });
+    wireSelect("typeFilter",       function(v) { activeType = v; });
+    wireSelect("accessFilter",     function(v) { activeAccess = v; });
+    wireSelect("classFilter",      function(v) { activeClass = v; });
+    wireSelect("instructorFilter", function(v) { activeInstructor = v; });
+
+    // ── NAV ───────────────────────────────────────────────────
+    (function() {
+      var nav = document.getElementById("belmontNav");
+      var toggle = document.getElementById("belmontNavToggle");
+      var current = nav.getAttribute("data-current");
+      var links = nav.querySelectorAll(".belmont-nav-link");
+      for (var i = 0; i < links.length; i++) {
+        if (links[i].getAttribute("data-page") === current) { links[i].classList.add("is-current"); }
+      }
+      toggle.addEventListener("click", function(e) {
+        e.stopPropagation();
+        var isOpen = nav.classList.toggle("open");
+        toggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+      });
+      document.addEventListener("click", function(e) {
+        if (!nav.contains(e.target)) {
+          nav.classList.remove("open");
+          toggle.setAttribute("aria-expanded", "false");
+        }
+      });
+      document.addEventListener("keydown", function(e) {
+        if (e.key === "Escape" && !overlay.classList.contains("open")) {
+          nav.classList.remove("open");
+          toggle.setAttribute("aria-expanded", "false");
+        }
+      });
+    })();
+  </script>
+
+</body>
+</html>
