@@ -929,7 +929,8 @@
           var r = objects[i];
           var activeVal = (r["Active"] || "").trim().toUpperCase();
           if (activeVal === "FALSE") { continue; }
-          if (!r["Title"]) { continue; }
+          if (!r["Title"] && !r["Display Name"]) { continue; }
+r._displayName = (r["Display Name"] && r["Display Name"].trim()) ? r["Display Name"].trim() : r["Title"];
           r._fileType = detectFileType(r);
           allResources.push(r);
         }
@@ -1103,7 +1104,7 @@
 
       item.innerHTML =
         fileTypeBadgeHtml(r._fileType) +
-        '<span class="list-title">' + r["Title"] + '</span>' +
+        '<span class="list-title">' + r._displayName + '</span>' +
         '<span class="list-category">' + (r["Category"] || "") + '</span>' +
         accessIconsHtml(r) +
         '<span class="list-date">' + formatDate(r["Submission Date"]) + '</span>' +
@@ -1126,7 +1127,7 @@
           fileTypeBadgeHtml(r._fileType) +
           accessIconsHtml(r) +
         '</div>' +
-        '<div class="card-title">' + r["Title"] + '</div>' +
+        '<div class="card-title">' + r._displayName + '</div>' +
         '<div class="card-category">' + (r["Category"] || "") + '</div>' +
         '<div class="card-bottom-row">' +
           '<span class="card-date">' + formatDate(r["Submission Date"]) + '</span>' +
@@ -1150,7 +1151,7 @@
     function openModal(r) {
       // Header
       modalHeaderTop.innerHTML = fileTypeBadgeHtml(r._fileType);
-      modalTitleEl.textContent = r["Title"];
+      modalTitleEl.textContent = r._displayName;
 
       // Action buttons
       modalActions.innerHTML = "";
