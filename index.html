@@ -228,7 +228,7 @@
     .ft-word  { background: rgba(91,156,246,0.15);  color: #5b9cf6; border: 1px solid rgba(91,156,246,0.25); }
     .ft-excel { background: rgba(76,175,130,0.15);  color: #4caf82; border: 1px solid rgba(76,175,130,0.25); }
     .ft-pt    { background: rgba(168,85,247,0.15);  color: #c084fc; border: 1px solid rgba(168,85,247,0.25); }
-    .ft-logic { background: rgba(20,184,166,0.15);  color: #2dd4bf; border: 1px solid rgba(20,184,166,0.25); }
+    .ft-audio { background: rgba(20,184,166,0.15);  color: #2dd4bf; border: 1px solid rgba(20,184,166,0.25); }
     .ft-image { background: rgba(249,115,22,0.15);  color: #fb923c; border: 1px solid rgba(249,115,22,0.25); }
     .ft-other { background: rgba(143,142,157,0.12); color: var(--muted); border: 1px solid var(--border); }
 
@@ -791,7 +791,7 @@
         <option value="word">Word</option>
         <option value="excel">Excel</option>
         <option value="pt">Pro Tools</option>
-        <option value="logic">Logic</option>
+        <option value="audio">Audio</option>
         <option value="image">Image</option>
         <option value="other">Other</option>
       </select>
@@ -853,7 +853,7 @@
     // Replace with your published Google Sheet CSV URL
     // File → Share → Publish to web → Sheet tab → CSV → Copy URL
     // ══════════════════════════════════════════════════════════
-    var SHEET_CSV_URL = "YOUR_GOOGLE_SHEET_CSV_URL_HERE";
+    var SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSzduofsacwHTut6ZxgFnBY_y_Fuolb4rp8XqChocgWCskXXB7AhYAxYhS7i858OTeqIKPvvQy_hB0x/pub?output=csv";
 
     // ── GOOGLE SHEET COLUMN HEADERS (must match exactly) ──────
     // Submission Date, Title, Category, File Type, Access,
@@ -927,25 +927,25 @@
       var explicit = (row["File Type"] || "").toLowerCase().trim();
       if (explicit) {
         if (explicit === "pdf") { return "pdf"; }
-        if (explicit === "word" || explicit === "doc" || explicit === "docx") { return "word"; }
-        if (explicit === "excel" || explicit === "xls" || explicit === "xlsx") { return "excel"; }
-        if (explicit === "pro tools" || explicit === "pt" || explicit === "ptx" || explicit === "pts" || explicit === "pio") { return "pt"; }
-        if (explicit === "logic" || explicit === "logicx") { return "logic"; }
-        if (explicit === "image" || explicit === "png" || explicit === "jpg" || explicit === "jpeg") { return "image"; }
+        if (explicit === "word" || explicit === "doc" || explicit === "rtf" || explicit === "txt" || explicit === "text" || explicit === "md" || explicit === "pages" || explicit === "docx") { return "word"; }
+        if (explicit === "excel" || explicit === "xls" || explicit === "csv" || explicit === "xlms" || explicit === "numbers" || explicit === "xlsx") { return "excel"; }
+        if (explicit === "pro tools" || explicit === "pt" || explicit === "ptx" || explicit === "ptxt" || explicit === "ptf" || explicit === "ptxp" || explicit === "pts" || explicit === "uadmix" || explicit === "pio") { return "pt"; }
+        if (explicit === "audio" || explicit === "wav" || explicit === "mp3" || explicit === "m4a" || explicit === "aif" || explicit === "aiff" || explicit === "aac" || explicit === "ogg" || explicit === "wma" || explicit === "caf" || explicit === "flac") { return "audio"; }
+        if (explicit === "image" || explicit === "png" || explicit === "jpg" || explicit === "gif" || explicit === "bmp" || explicit === "webp" || explicit === "svg" || explicit === "tif" || explicit === "tiff" || explicit === "heic" || explicit === "heif" || explicit === "ico" || explicit === "psd" || explicit === "jpeg") { return "image"; }
       }
       // Infer from download URL extension
       var url = (row["Download URL"] || row["Preview URL"] || "").toLowerCase();
       if (url.indexOf(".pdf") !== -1) { return "pdf"; }
       if (url.indexOf(".doc") !== -1) { return "word"; }
       if (url.indexOf(".xls") !== -1) { return "excel"; }
-      if (url.indexOf(".ptx") !== -1 || url.indexOf(".pts") !== -1 || url.indexOf(".pio") !== -1) { return "pt"; }
-      if (url.indexOf(".logicx") !== -1) { return "logic"; }
+      if (url.indexOf(".ptx") !== -1 || url.indexOf(".pts") !== -1 || url.indexOf(".pio") !== -1 || url.indexOf(".uadmix") !== -1) { return "pt"; }
+      if (url.indexOf(".wav") !== -1) { return "audio"; }
       if (url.indexOf(".png") !== -1 || url.indexOf(".jpg") !== -1 || url.indexOf(".jpeg") !== -1) { return "image"; }
       return "other";
     }
 
     function fileTypeBadgeHtml(type) {
-      var labels = { pdf: "PDF", word: "Word", excel: "Excel", pt: "Pro Tools", logic: "Logic", image: "Image", other: "File" };
+      var labels = { pdf: "PDF", word: "Word", excel: "Excel", pt: "Pro Tools", audio: "Audio", image: "Image", other: "File" };
       var label = labels[type] || "File";
       return '<span class="ft-badge ft-' + type + '">' + label + '</span>';
     }
