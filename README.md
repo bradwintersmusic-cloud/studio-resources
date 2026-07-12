@@ -1,4 +1,5 @@
 # studio-resources
+
 # Resources — Belmont AET
 
 **Live URL:** https://bradwintersmusic-cloud.github.io/studio-resources/
@@ -10,7 +11,7 @@ Document and file directory for AET studio resources. Manuals, I/O guides, sessi
 ## Overview
 
 - List view (default) and card grid view toggle
-- File type badges with color coding (PDF, Word, Excel, Pro Tools, Logic, Image)
+- File type badges with color coding (PDF, Word, Excel, Pro Tools, Audio, Image)
 - Download and preview link indicators per resource
 - Filters: category, file type, access type, class, instructor
 - Full-text search: title, category, notes, instructor
@@ -36,22 +37,22 @@ To publish: Google Sheets → File → Share → Publish to web → select sheet
 
 Must match exactly (case-sensitive):
 
-| Column | Required | Notes |
-|---|---|---|
-| Submission Date | Auto | Written by Tally |
-| Display Name | No | User-friendly name; falls back to Title if blank |
-| Title | Yes | Actual file name or document title |
-| Category | Yes | See category list below |
-| File Type | No | PDF, Word, Excel, Pro Tools, Logic, Image — auto-detected from URL if blank |
-| Access | Yes | Downloadable, Preview Only, or Both |
-| Download URL | No | Dropbox `dl=1` link |
-| Preview URL | No | Dropbox `dl=0` link or Office Online viewer URL |
-| Instructor | No | |
-| Classes | No | Comma-separated class codes |
-| Studios | No | Comma-separated studio names |
-| Notes | No | Description shown in modal |
-| Pinned | Manual | TRUE = appears above main list |
-| Active | Manual | FALSE to hide; missing or TRUE = visible |
+| Column          | Required | Notes                                                                       |
+| --------------- | -------- | --------------------------------------------------------------------------- |
+| Submission Date | Auto     | Written by Tally                                                            |
+| Display Name    | No       | User-friendly name; falls back to Title if blank                            |
+| Title           | Yes      | Actual file name or document title                                          |
+| Category        | Yes      | See category list below                                                     |
+| File Type       | No       | PDF, Word, Excel, Pro Tools, Audio, Image — auto-detected from URL if blank |
+| Access          | Yes      | Downloadable, Preview Only, or Both                                         |
+| Download URL    | No       | Dropbox `dl=1` link                                                         |
+| Preview URL     | No       | Dropbox `dl=0` link or Office Online viewer URL                             |
+| Instructor      | No       |                                                                             |
+| Classes         | No       | Comma-separated class codes                                                 |
+| Studios         | No       | Comma-separated studio names                                                |
+| Notes           | No       | Description shown in modal                                                  |
+| Pinned          | Manual   | TRUE = appears above main list                                              |
+| Active          | Manual   | FALSE to hide; missing or TRUE = visible                                    |
 
 ---
 
@@ -63,15 +64,15 @@ Manual, Equipment Guide, I/O Setup, Session Template, Input Sheet, Patch Sheet, 
 
 ## File Type Badge Colors
 
-| Type | Color |
-|---|---|
-| PDF | Red |
-| Word (.doc/.docx) | Blue |
-| Excel (.xls/.xlsx) | Green |
+| Type                       | Color  |
+| -------------------------- | ------ |
+| PDF                        | Red    |
+| Word (.doc/.docx)          | Blue   |
+| Excel (.xls/.xlsx)         | Green  |
 | Pro Tools (.ptx/.pts/.pio) | Purple |
-| Logic (.logicx) | Teal |
-| Image (.png/.jpg) | Orange |
-| Other | Grey |
+| Audio (.wav)               | Teal   |
+| Image (.png/.jpg)          | Orange |
+| Other                      | Grey   |
 
 ---
 
@@ -86,6 +87,7 @@ Files are hosted on Dropbox. The Make automation scenario handles routing:
 5. Preview URL is added manually if needed (e.g. Office Online viewer link for Word/Excel)
 
 **Dropbox URL formats:**
+
 - Download: change `dl=0` to `dl=1` at end of shared link
 - Preview (PDF): change `dl=0` to `raw=1` for direct browser rendering
 - Preview (Office): use `https://view.officeapps.live.com/op/view.aspx?src=ENCODED_DROPBOX_URL`
